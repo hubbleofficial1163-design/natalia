@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Александр & Наталья | Свадьба 22.06.2026</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Прелоадер -->
+    <div class="loader">
+        <div class="loader-text">Мы ждём вас</div>
+    </div>
+
+    <!-- Hero секция -->
+    <section class="hero">
+        <div class="hero-content">
+            <!-- Плеер -->
+            <div class="music-player">
+                <audio id="wedding-audio" loop>
+                    <source src="1.mp3" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудио элемент.
+                </audio>
+                <div class="player-controls">
+                    <button id="play-btn" class="player-btn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="player-info">
+                        <span class="player-title">Наша свадебная песня</span>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                    <button id="mute-btn" class="player-btn">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Имена пары -->
+            <div class="couple-names">
+                <h1>Александр</h1>
+                <div class="names-separator">
+                    <span class="ampersand">&</span>
+                </div>
+                <h1>Наталья</h1>
+            </div>
+
+            <!-- Счетчик -->
+            <div class="countdown-container hero-timer">
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <span id="days">00</span>
+                        <span class="countdown-label">дней</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="hours">00</span>
+                        <span class="countdown-label">часов</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="minutes">00</span>
+                        <span class="countdown-label">минут</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="seconds">00</span>
+                        <span class="countdown-label">секунд</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Новая секция: Календарь на месяц -->
+<section class="calendar-section">
+    <div class="calendar-overlay"></div>
+    <div class="container">
+        <div class="calendar-content">
+            <h2 class="calendar-title">Сохраните дату</h2>
+            <div class="calendar-card">
+                <div class="calendar-header">
+                    <div class="calendar-month-year">
+                        <span class="calendar-month-name">Июнь</span>
+                        <span class="calendar-year-number">2026</span>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <span>ПН</span>
+                        <span>ВТ</span>
+                        <span>СР</span>
+                        <span>ЧТ</span>
+                        <span>ПТ</span>
+                        <span>СБ</span>
+                        <span>ВС</span>
+                    </div>
+                </div>
+                <div class="calendar-grid">
+                    <!-- Пустые ячейки для начала месяца (июнь 2026 начинается с понедельника) -->
+                    <!-- <span class="calendar-day-cell empty"></span> -->
+                    
+                    <!-- Дни месяца -->
+                    <span class="calendar-day-cell">1</span>
+                    <span class="calendar-day-cell">2</span>
+                    <span class="calendar-day-cell">3</span>
+                    <span class="calendar-day-cell">4</span>
+                    <span class="calendar-day-cell">5</span>
+                    <span class="calendar-day-cell">6</span>
+                    <span class="calendar-day-cell">7</span>
+                    <span class="calendar-day-cell">8</span>
+                    <span class="calendar-day-cell">9</span>
+                    <span class="calendar-day-cell">10</span>
+                    <span class="calendar-day-cell">11</span>
+                    <span class="calendar-day-cell">12</span>
+                    <span class="calendar-day-cell">13</span>
+                    <span class="calendar-day-cell">14</span>
+                    <span class="calendar-day-cell">15</span>
+                    <span class="calendar-day-cell">16</span>
+                    <span class="calendar-day-cell">17</span>
+                    <span class="calendar-day-cell">18</span>
+                    <span class="calendar-day-cell">19</span>
+                    <span class="calendar-day-cell">20</span>
+                    <span class="calendar-day-cell">21</span>
+                    <span class="calendar-day-cell highlight">22</span>
+                    <span class="calendar-day-cell">23</span>
+                    <span class="calendar-day-cell">24</span>
+                    <span class="calendar-day-cell">25</span>
+                    <span class="calendar-day-cell">26</span>
+                    <span class="calendar-day-cell">27</span>
+                    <span class="calendar-day-cell">28</span>
+                    <span class="calendar-day-cell">29</span>
+                    <span class="calendar-day-cell">30</span>
+                </div>
+                <div class="calendar-footer">
+                    <i class="fas fa-heart"></i>
+                    <span>Наш особенный день</span>
+                    <i class="fas fa-heart"></i>
+                </div>
+            </div>
+            <p class="calendar-note">Ждем вас 22 июня 2026 года</p>
+        </div>
+    </div>
+</section>
+
+    <!-- Обращение к гостям -->
+    <section class="greeting">
+        <div class="greeting-bg"></div>
+        <div class="greeting-overlay"></div>
+        <div class="container">
+            <div class="greeting-content">
+                <div class="greeting-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h2>Дорогие друзья!</h2>
+                <p class="greeting-text">
+                    Мы с огромной радостью приглашаем вас разделить с нами самый важный и счастливый день в нашей жизни. 
+                    Ваше присутствие сделает этот день по-настоящему особенным и наполнит его теплом и любовью.
+                </p>
+                <p class="greeting-text">
+                    Этот день мы ждали с нетерпением и очень хотим провести его в окружении самых близких и дорогих людей. 
+                    Ваши улыбки, поздравления и добрые слова станут для нас лучшим подарком.
+                </p>
+                <p class="greeting-signature">
+                    С любовью,<br>
+                    <span class="signature-names">Александр и Наталья</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Детали мероприятия -->
+    <section class="details" id="invitation">
+        <div class="container">
+            <h2 class="section-title">Детали дня</h2>
+            <p class="section-subtitle">Время и место, которые войдут в нашу историю</p>
+            
+            <div class="details-timeline">
+                <!-- Wellcome -->
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <div class="icon-circle">
+                            <i class="fas fa-camera-retro"></i>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Welcome</h3>
+                            <span class="timeline-time">16:30</span>
+                        </div>
+                        <p class="timeline-location">Сбор гостей, фуршет</p>
+                    </div>
+                </div>
+                <!-- Церемония -->
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <div class="icon-circle">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Церемония</h3>
+                            <span class="timeline-time">17:00</span>
+                        </div>
+                        <p class="timeline-location">Официальная регистрация брака </p>
+                    </div>
+                </div>
+
+                <!-- Банкет -->
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <div class="icon-circle">
+                            <i class="fas fa-glass-cheers"></i>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Начало банкета</h3>
+                            <span class="timeline-time">18:00</span>
+                        </div>
+                        <p class="timeline-address">г.Красноярск пос. Солонцы ул.Осенняя 29 «Сказочный замок»</p>
+                        <div class="timeline-description">
+                            <p>Время для вкусной еды, танцев и развлечений.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Завершение праздника (новый пункт) -->
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <div class="icon-circle">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Окончание банкета</h3>
+                            <span class="timeline-time">23:00</span>
+                        </div>
+                        <p class="timeline-location">К сожалению, даже такие радостные дни заканчиваются</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://yandex.ru/maps/-/CPuaA4~q" target="_blank" rel="noopener noreferrer" class="map-button">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Посмотреть на карте</span>
+</a>
+        </div>
+    </section>
+
+        <!-- Секция Пожелания -->
+    <!-- Секция Пожелания -->
+    <section class="wishes">
+        <div class="container">
+            <h2 class="section-title">Пожелания</h2>
+            <div class="wishes-content">
+                <div class="wishes-card">  <!-- Удален класс -->
+                    <div class="wishes-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <p class="wishes-text">
+                        Дорогие гости! В качестве подарка мы будем рады вкладу в бюджет нашей семьи. Он точно поможет воплотить нашу мечту в реальность!
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+        <!-- ============================================== -->
+    <!-- НОВАЯ СЕКЦИЯ: Дресс-код -->
+    <!-- ============================================== -->
+    <!-- ============================================== -->
+    <!-- НОВАЯ СЕКЦИЯ: Дресс-код -->
+    <!-- ============================================== -->
+    <section class="dresscode">
+        <div class="container">
+            <h2 class="section-title">Дресс-код</h2>
+            <div class="dresscode-content">
+                <p class="dresscode-text">
+                    Мы будем очень благодарны, если вы поддержите цветовую гамму нашей свадьбы при выборе своего наряда.
+                </p>
+                
+                <!-- Горизонтальное фото палитры (заменено на цветные кружочки) -->
+                <div class="dresscode-palette">
+                    <div class="color-circles">
+                        <div class="color-circle" style="background-color: #281914;"></div>
+                        <div class="color-circle" style="background-color: #4d3a33;"></div>
+                        <div class="color-circle" style="background-color: #826557;"></div>
+                        <div class="color-circle" style="background-color: #c19683;"></div>
+                        <div class="color-circle" style="background-color: #c19683;"></div>
+                    </div>
+                </div>
+
+                <!-- ДОБАВЛЕНО: Фото 2.png под цветными кружочками -->
+                <div class="dresscode-image-container">
+                    <img src="2.png" alt="Примеры образов для вдохновения" class="dresscode-inspiration-image">
+                </div>
+
+                <!-- Мини-галерея для вдохновения (закомментирована) -->
+                <!-- <div class="dresscode-gallery">
+                    <h3 class="gallery-title">Вдохновляйтесь образами</h3>
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <img src="11.JPG" alt="Образ для вдохновения 1" class="gallery-image">
+                        </div>
+                        ...
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+<!-- ============================================== -->
+    <!-- ============================================== -->
+
+
+    <!-- Форма подтверждения -->
+    <!-- Форма подтверждения -->
+    <!-- Форма подтверждения -->
+    <section class="rsvp">
+        <div class="container">
+            <div class="rsvp-header">
+                <h2 class="section-title">Мы будем рады видеть вас</h2>
+                <!-- <p class="rsvp-subtitle">Подтвердите, пожалуйста, ваше присутствие до 1 сентября</p> -->
+            </div>
+            
+            
+            <form id="rsvp-form" class="rsvp-form">
+                <div class="form-header">
+                    <h3><i class="fas fa-pen-nib"></i> Ваш ответ</h3>
+                    <p class="deadline-text"> Чтобы мы смогли спланировать нашу свадьбу наилучшим образом и внести вас в список гостей, заполните поля ниже.</p>
+                    <p class="deadline-text">Пожалуйста, дайте ответ до 20 мая</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i>
+                        <span>Ваше имя и фамилия</span>
+                    </label>
+                    <input type="text" id="name" placeholder="Например: Анна Иванова" required>
+                </div>
+                
+                
+                <div class="form-group">
+                    <label class="attendance-label">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Вы сможете прийти?</span>
+                    </label>
+                    <div class="simple-attendance-options">
+                        <label class="simple-option">
+                            <input type="radio" name="attendance" value="yes" required>
+                            <span class="option-text">Да, с удовольствием!</span>
+                            <span class="radio-circle"></span>
+                        </label>
+                        <label class="simple-option">
+                            <input type="radio" name="attendance" value="no" required>
+                            <span class="option-text">К сожалению, не смогу</span>
+                            <span class="radio-circle"></span>
+                        </label>
+                        <label class="simple-option">
+                            <input type="radio" name="attendance" value="maybe" required>
+                            <span class="option-text">На данный момент затрудняюсь ответить</span>
+                            <span class="radio-circle"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- НОВЫЙ БЛОК: Предпочтения по алкоголю -->
+                <div class="form-group">
+                    <label class="attendance-label">
+                        <i class="fas fa-wine-glass-alt"></i>
+                        <span>Предпочтение по алкоголю</span>
+                    </label>
+                    <div class="alcohol-options">
+                        <label class="alcohol-option">
+                            <input type="checkbox" name="alcohol" value="Шампанское">
+                            <span class="alcohol-text">Шампанское</span>
+                            <span class="checkbox-custom"></span>
+                        </label>
+                        <label class="alcohol-option">
+                            <input type="checkbox" name="alcohol" value="Крепкое">
+                            <span class="alcohol-text">Крепкое</span>
+                            <span class="checkbox-custom"></span>
+                        </label>
+                        <label class="alcohol-option">
+                            <input type="checkbox" name="alcohol" value="Вино">
+                            <span class="alcohol-text">Вино</span>
+                            <span class="checkbox-custom"></span>
+                        </label>
+                        <label class="alcohol-option">
+                            <input type="checkbox" name="alcohol" value="Безалкогольные напитки">
+                            <span class="alcohol-text">Безалкогольные напитки</span>
+                            <span class="checkbox-custom"></span>
+                        </label>
+                    </div>
+                    <p class="alcohol-hint"><i class="fas fa-info-circle"></i> Можно выбрать несколько вариантов</p>
+                </div>
+
+                <!-- <div class="form-group">
+                    <label for="diet">
+                        <i class="fas fa-utensils"></i>
+                        <span>Особенности питания</span>
+                    </label>
+                    <textarea 
+                        id="diet" 
+                        name="diet" 
+                        rows="3" 
+                        placeholder="аллергии, непереносимости или вы придерживаетесь особого типа питания..."
+                        class="diet-input"
+                    ></textarea>
+                    <p class="diet-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Мы постараемся учесть все особенности
+                    </p>
+                </div> -->
+                
+                <button type="submit" class="submit-btn">
+                    <span>Отправить ответ</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                
+                <div class="form-footer">
+                    <p><i class="fas fa-info-circle"></i> Ваши данные будут использованы только для организации свадьбы</p>
+                </div>
+            </form>
+            
+            <div class="rsvp-success" id="success-message">
+                <div class="success-content">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Спасибо за ваш ответ!</h3>
+                    <p>Мы получили ваше подтверждение и будем с нетерпением ждать встречи.</p>
+                    <div class="success-buttons">
+                        <button class="success-btn" id="new-response">Заполнить ещё один ответ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer>
+        <div class="container">
+            <p>С любовью, Александр и Наталья</p>
+            <p class="footer-note">22.06.2026 — день, когда начинается наша история</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
