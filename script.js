@@ -6,6 +6,7 @@
 // Конфигурация
 const CONFIG = {
     APPS_SCRIPT_URL: 'https://script.google.com/macros/s/x5SzA/exec', // ЗАМЕНИТЕ НА ВАШ URL
+    TELEGRAM_CHAT_URL: 'https://t.me/your_chat_link', // ЗАМЕНИТЕ на ссылку вашего чата
     WEDDING_DATE: '2026-06-11T15:30:00' // Дата свадьбы 11 июня 2026
 };
 
@@ -426,3 +427,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Предотвращаем автовоспроизведение (браузеры блокируют)
     // Музыка начнет играть только после клика
 });
+
