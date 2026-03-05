@@ -347,30 +347,36 @@ document.head.appendChild(style);
 console.log('Свадебный сайт загружен. Дата свадьбы:', CONFIG.WEDDING_DATE);
 
 // ==============================================
-// МУЗЫКАЛЬНЫЙ ПЛЕЕР В HERO СЕКЦИИ
+// МУЗЫКАЛЬНЫЙ ПЛЕЕР В HERO СЕКЦИИ (ИСПРАВЛЕННЫЙ)
 // ==============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    const audio = document.getElementById('heroWeddingAudio');
-    const toggleBtn = document.getElementById('heroPlayerToggle');
-    const icon = document.getElementById('heroPlayerIcon');
-    const text = toggleBtn.querySelector('.hero-player-text');
+    const audio = document.getElementById('wedding-audio');
+    const playBtn = document.getElementById('play-btn');
+    const muteBtn = document.getElementById('mute-btn');
+    const progressBar = document.querySelector('.progress');
     
     let isPlaying = false;
+    let isMuted = false;
     
-    toggleBtn.addEventListener('click', function(e) {
+    // Воспроизведение/пауза
+    playBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         if (isPlaying) {
             audio.pause();
-            updatePlayerUI(false);
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
         } else {
             audio.play().then(() => {
-                updatePlayerUI(true);
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }).catch(error => {
                 console.log('Ошибка воспроизведения:', error);
+                // Автовоспроизведение может быть заблокировано браузером
+                alert('Нажмите кнопку еще раз, чтобы включить музыку (браузер блокирует автовоспроизведение)');
             });
         }
+        
+        isPlaying = !isPlaying;
         
         // Тактильный отклик
         if (navigator.vibrate) {
@@ -378,28 +384,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    function updatePlayerUI(playing) {
-        isPlaying = playing;
+    // Включение/выключение звука
+    muteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
         
-        if (playing) {
-            icon.className = 'fas fa-music';
-            text.textContent = 'Выключить музыку';
+        audio.muted = !audio.muted;
+        isMuted = !isMuted;
+        
+        if (isMuted) {
+            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
         } else {
-            icon.className = 'fas fa-play';
-            text.textContent = 'Включить музыку';
+            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
         }
-    }
+    });
     
-    // Обработка событий аудио
+    // Обновление прогресс-бара
+    audio.addEventListener('timeupdate', function() {
+        if (audio.duration) {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+    });
+    
+    // Сброс при окончании
     audio.addEventListener('ended', function() {
-        updatePlayerUI(false);
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        progressBar.style.width = '0%';
     });
     
     audio.addEventListener('pause', function() {
-        updatePlayerUI(false);
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
     });
     
     audio.addEventListener('play', function() {
-        updatePlayerUI(true);
+        isPlaying = true;
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
     });
+    
+    // Предотвращаем автовоспроизведение (браузеры блокируют)
+    // Музыка начнет играть только после клика
 });
