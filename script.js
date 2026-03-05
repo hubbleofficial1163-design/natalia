@@ -1,13 +1,13 @@
 // ==============================================
 // СВАДЕБНЫЙ САЙТ - ФРОНТЕНД
-// Михаил & Екатерина | 11.06.2026
+// Александр & Наталья | 22.06.2026
 // ==============================================
 
 // Конфигурация
 const CONFIG = {
-    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/x5SzA/exec', // ЗАМЕНИТЕ НА ВАШ URL
+    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxYTu4G1W2y4MY-_DYMM8HUSYVM87acW6Th7qp9-34xqrc98J_A4wPBPscxoxIy-3Dz/exec', // ЗАМЕНИТЕ НА ВАШ URL
     TELEGRAM_CHAT_URL: 'https://t.me/+HbqrlnY-NfQzMWZi', // ЗАМЕНИТЕ на ссылку вашего чата
-    WEDDING_DATE: '2026-06-11T15:30:00' // Дата свадьбы 11 июня 2026
+    WEDDING_DATE: '2026-06-22T16:30:00' // Дата свадьбы 22 июня 2026 в 16:30
 };
 
 // Прелоадер
@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Инициализация
     initTelegramLink();
+    initMusicPlayer();
 });
 
 // Таймер обратного отсчета
@@ -61,7 +62,88 @@ function initTelegramLink() {
     }
 }
 
-// Обработка формы RSVP (обновленная часть)
+// ==============================================
+// МУЗЫКАЛЬНЫЙ ПЛЕЕР
+// ==============================================
+function initMusicPlayer() {
+    const audio = document.getElementById('wedding-audio');
+    const playBtn = document.getElementById('play-btn');
+    const muteBtn = document.getElementById('mute-btn');
+    const progressBar = document.querySelector('.progress');
+    
+    if (!audio || !playBtn || !muteBtn) return;
+    
+    let isPlaying = false;
+    let isMuted = false;
+    
+    // Воспроизведение/пауза
+    playBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (isPlaying) {
+            audio.pause();
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        } else {
+            audio.play().then(() => {
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            }).catch(error => {
+                console.log('Ошибка воспроизведения:', error);
+                // Автовоспроизведение может быть заблокировано браузером
+                alert('Нажмите кнопку еще раз, чтобы включить музыку (браузер блокирует автовоспроизведение)');
+            });
+        }
+        
+        isPlaying = !isPlaying;
+        
+        // Тактильный отклик
+        if (navigator.vibrate) {
+            navigator.vibrate(30);
+        }
+    });
+    
+    // Включение/выключение звука
+    muteBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        audio.muted = !audio.muted;
+        isMuted = !isMuted;
+        
+        if (isMuted) {
+            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        } else {
+            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        }
+    });
+    
+    // Обновление прогресс-бара
+    audio.addEventListener('timeupdate', function() {
+        if (audio.duration) {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+        }
+    });
+    
+    // Сброс при окончании
+    audio.addEventListener('ended', function() {
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        progressBar.style.width = '0%';
+    });
+    
+    audio.addEventListener('pause', function() {
+        isPlaying = false;
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    });
+    
+    audio.addEventListener('play', function() {
+        isPlaying = true;
+        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    });
+}
+
+// ==============================================
+// ОБРАБОТКА ФОРМЫ RSVP
+// ==============================================
 const rsvpForm = document.getElementById('rsvp-form');
 if (rsvpForm) {
     rsvpForm.addEventListener('submit', async function(e) {
@@ -85,15 +167,11 @@ if (rsvpForm) {
         const alcoholCheckboxes = document.querySelectorAll('input[name="alcohol"]:checked');
         const alcoholPreferences = Array.from(alcoholCheckboxes).map(cb => cb.value).join(', ');
         
-        // Собираем особенности питания
-        const diet = document.getElementById('diet').value.trim() || 'Не указано';
-        
-        // Подготовка данных
+        // Подготовка данных (только нужные поля: имя, присутствие, алкоголь)
         const formData = {
             name: name,
             attendance: attendanceSelected.value,
-            alcohol: alcoholPreferences || 'Не указано',
-            diet: diet
+            alcohol: alcoholPreferences || 'Не указано'
         };
         
         // Отправка
@@ -101,7 +179,7 @@ if (rsvpForm) {
     });
 }
 
-// Функция отправки данных (обновленная)
+// Функция отправки данных в Google Apps Script
 async function submitRSVP(formData) {
     const submitBtn = document.querySelector('.submit-btn');
     const originalContent = submitBtn.innerHTML;
@@ -116,14 +194,12 @@ async function submitRSVP(formData) {
         data.append('name', formData.name);
         data.append('attendance', formData.attendance);
         data.append('alcohol', formData.alcohol);
-        data.append('diet', formData.diet);
-        data.append('timestamp', new Date().toLocaleString('ru-RU'));
         
         // Отправляем запрос
         const response = await fetch(CONFIG.APPS_SCRIPT_URL, {
             method: 'POST',
             body: data,
-            mode: 'no-cors'
+            mode: 'no-cors' // Важно для работы с Google Apps Script
         });
         
         // Успешная отправка
@@ -131,7 +207,8 @@ async function submitRSVP(formData) {
         
     } catch (error) {
         console.error('Ошибка отправки:', error);
-        showSuccess(formData.name); // Показываем успех даже при ошибке (fallback)
+        // Показываем успех даже при ошибке (fallback для пользователя)
+        showSuccess(formData.name);
     } finally {
         // Восстанавливаем кнопку
         submitBtn.innerHTML = originalContent;
@@ -240,7 +317,9 @@ if (newResponseBtn) {
     });
 }
 
-// Плавная прокрутка
+// ==============================================
+// ПЛАВНАЯ ПРОКРУТКА
+// ==============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         const href = this.getAttribute('href');
@@ -257,7 +336,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Анимация появления элементов
+// ==============================================
+// АНИМАЦИЯ ПОЯВЛЕНИЯ ЭЛЕМЕНТОВ
+// ==============================================
 function animateOnScroll() {
     const elements = document.querySelectorAll('.timeline-item, .wishes-card, .greeting-content');
     const windowHeight = window.innerHeight;
@@ -274,7 +355,7 @@ function animateOnScroll() {
 
 // Устанавливаем начальные стили для анимации
 document.querySelectorAll('.timeline-item, .wishes-card, .greeting-content').forEach(element => {
-    if (!element.classList.contains('timeline-item')) { // timeline-item уже имеет анимацию в CSS
+    if (!element.classList.contains('timeline-item')) {
         element.style.opacity = '0';
         element.style.transform = 'translateY(20px)';
         element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -283,6 +364,10 @@ document.querySelectorAll('.timeline-item, .wishes-card, .greeting-content').for
 
 window.addEventListener('scroll', animateOnScroll);
 window.addEventListener('load', animateOnScroll);
+
+// ==============================================
+// УЛУЧШЕНИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ
+// ==============================================
 
 // Предотвращение двойного тапа для масштабирования
 let lastTouchEnd = 0;
@@ -305,7 +390,7 @@ if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     }, true);
 }
 
-// Анимация иконок
+// Анимация иконок при касании
 document.querySelectorAll('.icon-circle, .alcohol-option, .simple-option').forEach(element => {
     element.addEventListener('touchstart', function() {
         this.style.transform = 'scale(0.98)';
@@ -319,7 +404,9 @@ document.querySelectorAll('.icon-circle, .alcohol-option, .simple-option').forEa
     }, { passive: true });
 });
 
-// Добавляем CSS для анимаций
+// ==============================================
+// ДОБАВЛЯЕМ CSS ДЛЯ АНИМАЦИЙ
+// ==============================================
 const style = document.createElement('style');
 style.textContent = `
     @keyframes fadeIn {
@@ -336,96 +423,11 @@ style.textContent = `
         100% { transform: rotate(360deg); }
     }
     
-    /* Стили для плавного появления */
     .wishes-card, .greeting-content {
         transition: opacity 0.6s ease, transform 0.6s ease;
     }
 `;
 document.head.appendChild(style);
 
-// Логирование для отладки (можно удалить в продакшене)
-
+// Логирование для отладки
 console.log('Свадебный сайт загружен. Дата свадьбы:', CONFIG.WEDDING_DATE);
-
-// ==============================================
-// МУЗЫКАЛЬНЫЙ ПЛЕЕР В HERO СЕКЦИИ (ИСПРАВЛЕННЫЙ)
-// ==============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    const audio = document.getElementById('wedding-audio');
-    const playBtn = document.getElementById('play-btn');
-    const muteBtn = document.getElementById('mute-btn');
-    const progressBar = document.querySelector('.progress');
-    
-    let isPlaying = false;
-    let isMuted = false;
-    
-    // Воспроизведение/пауза
-    playBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        if (isPlaying) {
-            audio.pause();
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        } else {
-            audio.play().then(() => {
-                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            }).catch(error => {
-                console.log('Ошибка воспроизведения:', error);
-                // Автовоспроизведение может быть заблокировано браузером
-                alert('Нажмите кнопку еще раз, чтобы включить музыку (браузер блокирует автовоспроизведение)');
-            });
-        }
-        
-        isPlaying = !isPlaying;
-        
-        // Тактильный отклик
-        if (navigator.vibrate) {
-            navigator.vibrate(30);
-        }
-    });
-    
-    // Включение/выключение звука
-    muteBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        audio.muted = !audio.muted;
-        isMuted = !isMuted;
-        
-        if (isMuted) {
-            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-        } else {
-            muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        }
-    });
-    
-    // Обновление прогресс-бара
-    audio.addEventListener('timeupdate', function() {
-        if (audio.duration) {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = progress + '%';
-        }
-    });
-    
-    // Сброс при окончании
-    audio.addEventListener('ended', function() {
-        isPlaying = false;
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        progressBar.style.width = '0%';
-    });
-    
-    audio.addEventListener('pause', function() {
-        isPlaying = false;
-        playBtn.innerHTML = '<i class="fas fa-play"></i>';
-    });
-    
-    audio.addEventListener('play', function() {
-        isPlaying = true;
-        playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    });
-    
-    // Предотвращаем автовоспроизведение (браузеры блокируют)
-    // Музыка начнет играть только после клика
-});
-
-
