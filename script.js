@@ -431,3 +431,4 @@ document.head.appendChild(style);
 
 // Логирование для отладки
 console.log('Свадебный сайт загружен. Дата свадьбы:', CONFIG.WEDDING_DATE);
+
